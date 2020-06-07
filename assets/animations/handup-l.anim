@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "handup-l",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "9c69a3b6-c406-4b6f-ad9a-f00a186dba35"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "6587468c-964c-4459-ae44-0b26a24324e6"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

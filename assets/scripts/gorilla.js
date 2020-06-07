@@ -15,8 +15,6 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-        this.is_hand_up = false;
-        this.is_other_up = false;
     },
 
     start: function () {
@@ -25,31 +23,29 @@ cc.Class({
     update: function (dt) {
     },
 
-    getResPath: function (is_up, other) {
+    getHandupAnim: function (other) {
         var is_l = this.is_l ^ other;
-        var respost = "";
-        if (is_up) {
-            respost = "-r";
-            if (is_l) {
-                respost = "-l";
-            }
+        postfix = "-r";
+        if (is_l) {
+            postfix = "-l";
         }
-        return "textures/gorilla" + respost;
+        return "handup" + postfix;
     },
 
-    handUp: function (is_up, other = false) {
-        if ((is_up == this.is_hand_up) && ((other == this.is_other_up) || !is_up)) {
-            return
-        }
+    handUp: function (other = false) {
+        this.node.getComponent(cc.Animation).play(this.getHandupAnim())
+    },
+
+    dance: function (repeat = 3) {
         var self = this;
-        cc.loader.loadRes(this.getResPath(is_up, other), cc.SpriteFrame,
-            function (err, spriteFrame) {
-                self.node.getComponent(cc.Sprite).spriteFrame = spriteFrame;
-            }
-        );
-        cc.loader.releaseRes(this.getResPath(this.is_hand_up, this.is_other_up),
-            cc.SpriteFrame);
-        this.is_hand_up = is_up;
-        this.is_other_up = other;
-    }
+        var anim = this.node.getComponent(cc.Animation);
+        for (let i = 0; i < repeat; i++) {
+            anim.scheduleOnce(function () {
+                this.play(self.getHandupAnim(false));
+            }, i);
+            anim.scheduleOnce(function () {
+                this.play(self.getHandupAnim(true));
+            }, i + 0.5);
+        }
+    },
 });

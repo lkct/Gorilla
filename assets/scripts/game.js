@@ -38,10 +38,10 @@ cc.Class({
 
     update: function (dt) {
         this.time_stopped += dt;
-        if (this.time_stopped > 1.0) {
+        if (this.time_stopped > 5.0) {
             this.time_stopped = 0.0;
             this.is_hand_up = !this.is_hand_up;
-            this.node.getChildByName("gorilla").getComponent("gorilla").handUp(this.is_hand_up)
+            this.node.getChildByName("gorilla").getComponent("gorilla").dance()
         }
     },
 });
