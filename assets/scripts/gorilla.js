@@ -33,7 +33,7 @@ cc.Class({
     },
 
     handUp: function (other = false) {
-        this.node.getComponent(cc.Animation).play(this.getHandupAnim())
+        this.node.getComponent(cc.Animation).play(this.getHandupAnim(other))
     },
 
     dance: function (repeat = 3) {
