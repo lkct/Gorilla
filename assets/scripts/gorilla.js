@@ -9,7 +9,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        is_l: true,
+        isL: true,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -24,9 +24,9 @@ cc.Class({
     },
 
     getHandupAnim: function (other) {
-        var is_l = this.is_l ^ other;
+        var isL = this.isL ^ other;
         postfix = "-r";
-        if (is_l) {
+        if (isL) {
             postfix = "-l";
         }
         return "handup" + postfix;
