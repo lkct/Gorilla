@@ -24,17 +24,9 @@ cc.Class({
     update: function (dt) {
     },
 
-    getHandupAnim: function (other) {
-        var isL = this.isL ^ other;
-        postfix = "-r";
-        if (isL) {
-            postfix = "-l";
-        }
-        return "handup" + postfix;
-    },
-
     handUp: function (other = false) {
-        this.node.getComponent(cc.Animation).play(this.getHandupAnim(other));
+        this.node.getComponent(cc.Animation)
+            .play("handup" + ((this.isL ^ other) ? "L" : "R"));
     },
 
     dance: function (repeat = 3) {
@@ -42,10 +34,10 @@ cc.Class({
         var anim = this.node.getComponent(cc.Animation);
         for (let i = 0; i < repeat; i++) {
             anim.scheduleOnce(function () {
-                this.play(self.getHandupAnim(false));
+                this.play("handup" + (this.isL ? "L" : "R"));
             }, i);
             anim.scheduleOnce(function () {
-                this.play(self.getHandupAnim(true));
+                this.play("handup" + (!this.isL ? "L" : "R"));
             }, i + 0.5);
         }
     },
@@ -61,5 +53,22 @@ cc.Class({
         angle = angle / 180 * Math.PI;
         banana.getComponent("banana").speedX = speed * Math.cos(angle);
         banana.getComponent("banana").speedY = speed * Math.sin(angle);
-    }
+    },
+
+    onCollisionEnter: function (other, self) {
+        this.explode();
+        this.node.parent.getComponent("game").dancing = (!this.isL) ? "L" : "R";
+        this.node.parent.getComponent("game").isBananaStage = false;
+    },
+
+    explode: function () {
+        var expbg = cc.instantiate(this.node.parent
+            .getComponent("game").explosionbgPrefab);
+        this.node.parent.addChild(expbg);
+        expbg.setSiblingIndex(this.node.getSiblingIndex());
+        expbg.setPosition(this.node.x, this.node.y);
+        expbg.setScale(2.5);
+
+        this.node.getComponent(cc.Animation).play("explosion-gorilla");
+    },
 });

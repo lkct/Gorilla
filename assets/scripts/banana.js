@@ -22,15 +22,26 @@ cc.Class({
         this.speedY = 50;
         this.dpm = this.node.parent.getComponent("game").dpm;
         this.boardNode = cc.find("Canvas");
+        this.collided = false;
+        this.isToDestroy = false;
     },
 
     start: function () {
     },
 
     update: function (dt) {
+        if (this.collided &&
+            !this.node.getComponent(cc.Animation)
+                .getAnimationState("explosion-banana").isPlaying) {
+            this.isToDestroy = true;
+        }
     },
 
     move: function (dt, accel) {
+        if (this.collided) {
+            return true;
+        }
+
         this.speedY -= dt * accel / 2;
         this.node.x += this.speedX * dt * (this.isL ? 1 : -1) * this.dpm;
         this.node.y += this.speedY * dt * this.dpm;
@@ -56,5 +67,25 @@ cc.Class({
             return false;
         }
         return true;
-    }
+    },
+
+    onCollisionEnter: function (other, self) {
+        if (this.collided)
+        {
+            return;
+        }
+        
+        this.collided = true;
+        this.explode();
+    },
+
+    explode: function () {
+        var expbg = cc.instantiate(this.node.parent
+            .getComponent("game").explosionbgPrefab);
+        this.node.parent.addChild(expbg);
+        expbg.setSiblingIndex(this.node.getSiblingIndex());
+        expbg.setPosition(this.node.x, this.node.y);
+
+        this.node.getComponent(cc.Animation).play("explosion-banana");
+    },
 });

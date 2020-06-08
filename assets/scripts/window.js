@@ -38,6 +38,6 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        console.log('on collision enter');
+        this.node.group = "default";
     },
 });

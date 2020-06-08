@@ -49,6 +49,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        explosionbgPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
         windowSpriteFrames: {
             default: [],
             type: [cc.SpriteFrame]
@@ -66,7 +70,7 @@ cc.Class({
         this.timeStopped = 0.0;
         this.isInputStage = true;
         this.isBananaStage = false;
-        this.isDanceStage = false;
+        this.dancing = "";
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown, this);
@@ -81,6 +85,9 @@ cc.Class({
     onDestroy: function () {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown, this);
+        for (const child of this.children) {
+            child.destroy();
+        }
     },
 
     start: function () {
@@ -107,15 +114,36 @@ cc.Class({
             }
         }
         else if (this.isBananaStage) {
-            var banana = this.node.getChildByName("banana");
-            if (!banana.getComponent("banana")
-                .move(this.timeStopped, this.gravity)) {
-                banana.destroy();
+            var bananaNode = this.node.getChildByName("banana");
+            var bananaScript = bananaNode.getComponent("banana");
+            if (bananaScript.isToDestroy ||
+                !bananaScript.move(this.timeStopped, this.gravity)) {
+                bananaNode.destroy();
 
                 this.isBananaStage = false;
                 this.isInputStage = true;
                 this.isLTurn = !this.isLTurn;
             };
+        }
+        else {
+            var animDancing = this.node.getChildByName("gorilla" + this.dancing)
+                .getComponent(cc.Animation);
+            if (!animDancing.getAnimationState("handupL").isPlaying &&
+                !animDancing.getAnimationState("handupR").isPlaying) {
+                var lblScore = cc.find("Canvas/lbl-score")
+                    .getComponent(cc.Label);
+                var score = (this.dancing == "L") ? lblScore.string.slice(0, 2)
+                    : lblScore.string.slice(-2);
+                score = (parseInt(score, 10) + 1).toString();
+                score = ((score < 10) ? "0" : "") + score;
+                if (this.dancing == 'L') {
+                    lblScore.string = score + lblScore.string.slice(2);
+                }
+                else {
+                    lblScore.string = lblScore.string.slice(0, -2) + score;
+                }
+                // destroy
+            }
         }
 
         this.timeStopped = 0.0;
@@ -257,5 +285,5 @@ cc.Class({
             }
             this.lblCurrent = undefined;
         }
-    }
+    },
 });
