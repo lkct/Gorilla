@@ -36,11 +36,11 @@ cc.Class({
         this.node.y += this.speedY * dt * this.dpm;
         this.speedY -= dt * accel / 2;
         this.node.angle -= 90 * (this.isL ? 1 : -1);
-        if (this.rotation >= 360) {
-            this.rotation -= 360;
+        if (this.angle >= 360) {
+            this.angle -= 360;
         }
-        else if (this.rotation < 0) {
-            this.rotation += 360;
+        else if (this.angle < 0) {
+            this.angle += 360;
         }
 
         if (this.isL && (this.node.x < -this.boardNode.width / 2)) {
