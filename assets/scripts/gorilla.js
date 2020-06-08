@@ -15,6 +15,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
+        this.dance();
     },
 
     start: function () {

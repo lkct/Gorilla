@@ -1,10 +1,22 @@
 {
   "group-list": [
-    "default"
+    "default",
+    "collider",
+    "terrain"
   ],
   "collision-matrix": [
     [
+      false
+    ],
+    [
+      false,
+      false,
       true
+    ],
+    [
+      false,
+      true,
+      false
     ]
   ],
   "excluded-modules": [
@@ -37,6 +49,5 @@
       "enable": false
     }
   },
-  "migrate-history": [],
-  "start-scene": "current"
+  "migrate-history": []
 }
