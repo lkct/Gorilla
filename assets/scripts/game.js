@@ -53,22 +53,59 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-        this.is_hand_up = false;
-        this.time_stopped = 0.0;
+        this.timeStopped = 0.0;
         cc.director.getCollisionManager().enabled = true;
         // cc.director.getCollisionManager().enabledDebugDraw = true;
         this.spawnMap();
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,
+            this.onKeyDown, this);
+        this.isLNext = true;
+        this.nextInput = "angle";
+        this.lblCurrent = undefined;
+        this.isInputDone = false;
+    },
+
+    onDestroy: function () {
+        cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN,
+            this.onKeyDown, this);
     },
 
     start: function () {
     },
 
     update: function (dt) {
-        this.time_stopped += dt;
-        // if (this.time_stopped > 1) {
-        //     this.node.getChildByName("banana").getComponent("banana").move(this.time_stopped, 9.8);
-        //     this.time_stopped = 0.0;
-        // }
+        this.timeStopped += dt;
+        if (this.timeStopped > 0.1) {
+            // this.node.getChildByName("banana").getComponent("banana").move(this.timeStopped, 9.8);
+            this.timeStopped = 0.0;
+        }
+        else {
+            return;
+        }
+        if (this.lblCurrent === undefined) {
+            this.lblCurrent = this.node.getChildByName("lbl-" + this.nextInput +
+                (this.isLNext ? "L" : "R")).getComponent(cc.Label);
+            this.lblCurrent.string += '_';
+        }
+        else if (this.isInputDone) {
+            this.isInputDone = false;
+            this.lblCurrent.string = this.lblCurrent.string.slice(0, -1)
+            console.log(this.lblCurrent.string.slice(7));
+            if (this.nextInput == "angle") {
+                this.nextInput = "speed";
+            }
+            else {
+                this.node.getChildByName("lbl-angle" +
+                    (this.isLNext ? "L" : "R")).getComponent(cc.Label).string =
+                    "Angle: ";
+                this.node.getChildByName("lbl-speed" +
+                    (this.isLNext ? "L" : "R")).getComponent(cc.Label).string =
+                    "Speed: ";
+                this.nextInput = "angle";
+                this.isLNext = !this.isLNext;
+            }
+            this.lblCurrent = undefined;
+        }
     },
 
     spawnMap: function () {
@@ -114,6 +151,35 @@ cc.Class({
         var gorilla = cc.instantiate(this.gorillaPrefab);
         this.node.addChild(gorilla);
         gorilla.setPosition(x - 320, y - 240);
-        gorilla.getComponent('gorilla').isL = isL;
+        gorilla.getComponent("gorilla").isL = isL;
     },
+
+    onKeyDown: function (event) {
+        if (this.lblCurrent === undefined) {
+            return;
+        }
+        this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
+        switch (event.keyCode) {
+            case cc.macro.KEY.backspace:
+                this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
+                break;
+            case cc.macro.KEY.enter:
+                this.isInputDone = true;
+                break;
+            // case cc.macro.KEY["."]:
+            // case cc.macro.KEY.numdel:
+            //     this.lblCurrent.string += ".";
+            //     break;
+            default:
+                for (let i = 0; i < 10; i++) {
+                    if (((event.keyCode == cc.macro.KEY[i]) ||
+                        (event.keyCode == eval("cc.macro.KEY.num" + i))) &&
+                        (this.lblCurrent.string.length < 12)) {
+                        this.lblCurrent.string += i;
+                    }
+                }
+                break;
+        }
+        this.lblCurrent.string += '_';
+    }
 });
