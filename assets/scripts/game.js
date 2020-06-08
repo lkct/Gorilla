@@ -105,7 +105,7 @@ cc.Class({
     spawnWindow: function (x, y, texture) {
         var window = cc.instantiate(this.windowPrefab);
         this.node.addChild(window);
-        window.setPosition(cc.v2(x - 320, y - 240));
+        window.setPosition(x - 320, y - 240);
         window.getComponent(cc.Sprite).spriteFrame =
             this.windowSpriteFrames[texture];
     },
@@ -113,7 +113,7 @@ cc.Class({
     spawnGorilla: function (x, y, isL) {
         var gorilla = cc.instantiate(this.gorillaPrefab);
         this.node.addChild(gorilla);
-        gorilla.setPosition(cc.v2(x - 320, y - 240));
+        gorilla.setPosition(x - 320, y - 240);
         gorilla.getComponent('gorilla').isL = isL;
     },
 });
