@@ -36,6 +36,11 @@ cc.Class({
         //     }
         // },
         dpm: 1, // dots per meter
+        gravity: 9.8, // m/s^2
+        bananaPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
         gorillaPrefab: {
             default: null,
             type: cc.Prefab
@@ -46,23 +51,30 @@ cc.Class({
         },
         windowSpriteFrames: {
             default: [],
-            type: [cc.SpriteFrame]     // type 同样写成数组，提高代码可读性
+            type: [cc.SpriteFrame]
         },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-        this.timeStopped = 0.0;
         cc.director.getCollisionManager().enabled = true;
         // cc.director.getCollisionManager().enabledDebugDraw = true;
         this.spawnMap();
+
+        this.timeStopped = 0.0;
+        this.isInputStage = true;
+        this.isBananaStage = false;
+        this.isDanceStage = false;
+
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown, this);
-        this.isLNext = true;
+        this.isLTurn = true;
         this.nextInput = "angle";
         this.lblCurrent = undefined;
-        this.isInputDone = false;
+        this.isEnterPressed = false;
+        this.inputAngle = undefined;
+        this.inputSpeed = undefined;
     },
 
     onDestroy: function () {
@@ -75,37 +87,37 @@ cc.Class({
 
     update: function (dt) {
         this.timeStopped += dt;
-        if (this.timeStopped > 0.1) {
-            // this.node.getChildByName("banana").getComponent("banana").move(this.timeStopped, 9.8);
-            this.timeStopped = 0.0;
-        }
-        else {
+        if (this.timeStopped < 1.1) {
             return;
         }
-        if (this.lblCurrent === undefined) {
-            this.lblCurrent = this.node.getChildByName("lbl-" + this.nextInput +
-                (this.isLNext ? "L" : "R")).getComponent(cc.Label);
-            this.lblCurrent.string += '_';
-        }
-        else if (this.isInputDone) {
-            this.isInputDone = false;
-            this.lblCurrent.string = this.lblCurrent.string.slice(0, -1)
-            console.log(this.lblCurrent.string.slice(7));
-            if (this.nextInput == "angle") {
-                this.nextInput = "speed";
+
+        if (this.isInputStage) {
+            this.processInput();
+            if ((this.inputAngle !== undefined) &&
+                (this.inputSpeed !== undefined)) {
+                this.node.getChildByName("gorilla" + (this.isLTurn ? "L" : "R"))
+                    .getComponent("gorilla")
+                    .throw(this.inputAngle, this.inputSpeed, this.bananaPrefab);
+
+                this.isInputStage = false;
+                this.isBananaStage = true;
+                this.inputAngle = undefined;
+                this.inputSpeed = undefined;
             }
-            else {
-                this.node.getChildByName("lbl-angle" +
-                    (this.isLNext ? "L" : "R")).getComponent(cc.Label).string =
-                    "Angle: ";
-                this.node.getChildByName("lbl-speed" +
-                    (this.isLNext ? "L" : "R")).getComponent(cc.Label).string =
-                    "Speed: ";
-                this.nextInput = "angle";
-                this.isLNext = !this.isLNext;
-            }
-            this.lblCurrent = undefined;
         }
+        else if (this.isBananaStage) {
+            var banana = this.node.getChildByName("banana");
+            if (!banana.getComponent("banana")
+                .move(this.timeStopped, this.gravity)) {
+                banana.destroy();
+
+                this.isBananaStage = false;
+                this.isInputStage = true;
+                this.isLTurn = !this.isLTurn;
+            };
+        }
+
+        this.timeStopped = 0.0;
     },
 
     spawnMap: function () {
@@ -134,7 +146,7 @@ cc.Class({
     spawnBuilding: function (x0, width, height, color) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
-                this.spawnWindow(x0 + i * 10, j * 13, color * 2 + randInt(2))
+                this.spawnWindow(x0 + i * 10, j * 13, color * 2 + randInt(2));
             }
         }
     },
@@ -149,6 +161,7 @@ cc.Class({
 
     spawnGorilla: function (x, y, isL) {
         var gorilla = cc.instantiate(this.gorillaPrefab);
+        gorilla.name = "gorilla" + (isL ? "L" : "R");
         this.node.addChild(gorilla);
         gorilla.setPosition(x - 320, y - 240);
         gorilla.getComponent("gorilla").isL = isL;
@@ -158,18 +171,27 @@ cc.Class({
         if (this.lblCurrent === undefined) {
             return;
         }
+
         this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
         switch (event.keyCode) {
             case cc.macro.KEY.backspace:
                 this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
                 break;
+
             case cc.macro.KEY.enter:
-                this.isInputDone = true;
+                this.isEnterPressed = true;
                 break;
+
             // case cc.macro.KEY["."]:
             // case cc.macro.KEY.numdel:
             //     this.lblCurrent.string += ".";
             //     break;
+
+            case cc.macro.KEY["-"]:
+            case cc.macro.KEY.dash:
+                this.lblCurrent.string += "-";
+                break;
+
             default:
                 for (let i = 0; i < 10; i++) {
                     if (((event.keyCode == cc.macro.KEY[i]) ||
@@ -181,5 +203,58 @@ cc.Class({
                 break;
         }
         this.lblCurrent.string += '_';
+    },
+
+    processInput: function () {
+        if (this.lblCurrent === undefined) {
+            var lblNode = cc.find("Canvas/lbl-" + this.nextInput +
+                (this.isLTurn ? "L" : "R"));
+            lblNode.active = true;
+            this.lblCurrent = lblNode.getComponent(cc.Label);
+            this.lblCurrent.string += '_';
+        }
+        else if (this.isEnterPressed) {
+            this.isEnterPressed = false;
+            this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
+            var input = Number(this.lblCurrent.string.slice(7), 10);
+            if (isNaN(input) || (this.lblCurrent.string.length == 7)) {
+                this.lblCurrent.string =
+                    this.lblCurrent.string.slice(0, 7) + "_";
+                return; // illegal input
+            }
+
+            if (this.nextInput == "angle") {
+                if ((input >= 360) || (input <= -360)) {
+                    this.lblCurrent.string =
+                        this.lblCurrent.string.slice(0, 7) + "_";
+                    return; // illegal input
+                }
+
+                this.inputAngle = input;
+
+                this.nextInput = "speed";
+            }
+            else {
+                if ((input >= 256) || (input <= -1)) {
+                    this.lblCurrent.string =
+                        this.lblCurrent.string.slice(0, 7) + "_";
+                    return; // illegal input
+                }
+
+                this.inputSpeed = input;
+
+                var lblNode = cc.find("Canvas/lbl-angle" +
+                    (this.isLTurn ? "L" : "R"));
+                lblNode.getComponent(cc.Label).string = "Angle: ";
+                lblNode.active = false;
+                lblNode = cc.find("Canvas/lbl-speed" +
+                    (this.isLTurn ? "L" : "R"));
+                lblNode.getComponent(cc.Label).string = "Speed: ";
+                lblNode.active = false;
+
+                this.nextInput = "angle";
+            }
+            this.lblCurrent = undefined;
+        }
     }
 });

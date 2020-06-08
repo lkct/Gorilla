@@ -15,7 +15,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-        this.dance();
+        // this.dance();
     },
 
     start: function () {
@@ -34,7 +34,7 @@ cc.Class({
     },
 
     handUp: function (other = false) {
-        this.node.getComponent(cc.Animation).play(this.getHandupAnim(other))
+        this.node.getComponent(cc.Animation).play(this.getHandupAnim(other));
     },
 
     dance: function (repeat = 3) {
@@ -49,4 +49,17 @@ cc.Class({
             }, i + 0.5);
         }
     },
+
+    throw: function (angle, speed, bananaPrefab) {
+        this.handUp();
+        var banana = cc.instantiate(bananaPrefab);
+        banana.name = "banana";
+        this.node.parent.addChild(banana);
+        banana.setPosition(this.node.x - 8 * (this.isL ? 1 : -1),
+            this.node.y + 36);
+        banana.getComponent("banana").isL = this.isL;
+        angle = angle / 180 * Math.PI;
+        banana.getComponent("banana").speedX = speed * Math.cos(angle);
+        banana.getComponent("banana").speedY = speed * Math.sin(angle);
+    }
 });
