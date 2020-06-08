@@ -62,6 +62,7 @@ cc.Class({
         // cc.director.getCollisionManager().enabledDebugDraw = true;
         this.spawnMap();
 
+        this.updatePeriod = 1.0;
         this.timeStopped = 0.0;
         this.isInputStage = true;
         this.isBananaStage = false;
@@ -87,7 +88,7 @@ cc.Class({
 
     update: function (dt) {
         this.timeStopped += dt;
-        if (this.timeStopped < 1.1) {
+        if (this.timeStopped < this.updatePeriod) {
             return;
         }
 
