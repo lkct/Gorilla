@@ -20,21 +20,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
         dpm: 1, // dots per meter
         gravity: 9.8, // m/s^2
         bananaPrefab: {
@@ -88,6 +73,7 @@ cc.Class({
         for (const child of this.children) {
             child.destroy();
         }
+        cc.director.getCollisionManager().enabled = false;
     },
 
     start: function () {
@@ -171,7 +157,7 @@ cc.Class({
             }
             rest -= width;
         }
-        
+
         this.node.getChildByName("gorillaL").setSiblingIndex(
             this.node.childrenCount - 2);
         this.node.getChildByName("gorillaR").setSiblingIndex(

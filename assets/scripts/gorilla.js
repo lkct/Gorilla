@@ -43,7 +43,7 @@ cc.Class({
 
     throw: function (angle, speed, bananaPrefab) {
         this.handUp();
-        
+
         var banana = cc.instantiate(bananaPrefab);
         banana.name = "banana";
         this.node.parent.addChild(banana);
@@ -71,7 +71,7 @@ cc.Class({
             .getComponent("game").explosionbgPrefab);
         this.node.parent.addChild(expbg);
         expbg.setSiblingIndex(this.node.getSiblingIndex());
-        expbg.setPosition(this.node.x, this.node.y);
+        expbg.setPosition(this.node.x, this.node.y + 14.5);
         expbg.setScale(6);
 
         this.node.getComponent(cc.Animation).play("explosion-gorilla");

@@ -19,18 +19,43 @@
           }
         },
         {
-          "frame": 1,
+          "frame": 0.9,
           "value": {
             "__type__": "cc.Vec2",
-            "x": 0,
-            "y": 0
+            "x": 0.6,
+            "y": 0.6
           }
         }
       ],
       "anchorY": [
         {
           "frame": 0,
-          "value": 0.28
+          "value": 0.28,
+          "curve": "circIn"
+        },
+        {
+          "frame": 0.9,
+          "value": -1.7
+        }
+      ],
+      "width": [
+        {
+          "frame": 0,
+          "value": 15
+        },
+        {
+          "frame": 0.9,
+          "value": 15
+        }
+      ],
+      "height": [
+        {
+          "frame": 0,
+          "value": 11
+        },
+        {
+          "frame": 0.9,
+          "value": 11
         }
       ]
     },
@@ -41,6 +66,12 @@
             "frame": 0,
             "value": {
               "__uuid__": "3c3c0844-6ac4-434d-ba5d-7b89df83b3a5"
+            }
+          },
+          {
+            "frame": 0.9,
+            "value": {
+              "__uuid__": "984d1371-cd58-4dba-a4a5-cd5278ca99f3"
             }
           }
         ]
