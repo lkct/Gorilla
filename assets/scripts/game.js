@@ -162,6 +162,7 @@ cc.Class({
             width = randInt(minLen, maxLen + 1);
             height = randInt(1, 21);
             this.spawnBuilding(x0, width, height, randInt(3));
+
             if ((i == 2) && onThirdL || (i == 1) && !onThirdL) {
                 this.spawnGorilla(x0 + width * 5, height * 13, true);
             }
@@ -170,6 +171,11 @@ cc.Class({
             }
             rest -= width;
         }
+        
+        this.node.getChildByName("gorillaL").setSiblingIndex(
+            this.node.childrenCount - 2);
+        this.node.getChildByName("gorillaR").setSiblingIndex(
+            this.node.childrenCount - 1);
     },
 
     spawnBuilding: function (x0, width, height, color) {

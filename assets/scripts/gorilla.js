@@ -15,7 +15,6 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad: function () {
-        // this.dance();
     },
 
     start: function () {
@@ -34,19 +33,21 @@ cc.Class({
         var anim = this.node.getComponent(cc.Animation);
         for (let i = 0; i < repeat; i++) {
             anim.scheduleOnce(function () {
-                this.play("handup" + (this.isL ? "L" : "R"));
+                this.play("handup" + (self.isL ? "L" : "R"));
             }, i);
             anim.scheduleOnce(function () {
-                this.play("handup" + (!this.isL ? "L" : "R"));
+                this.play("handup" + (!self.isL ? "L" : "R"));
             }, i + 0.5);
         }
     },
 
     throw: function (angle, speed, bananaPrefab) {
         this.handUp();
+        
         var banana = cc.instantiate(bananaPrefab);
         banana.name = "banana";
         this.node.parent.addChild(banana);
+        banana.setSiblingIndex(this.node.getSiblingIndex());
         banana.setPosition(this.node.x - 8 * (this.isL ? 1 : -1),
             this.node.y + 36);
         banana.getComponent("banana").isL = this.isL;
@@ -56,7 +57,11 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
+        this.node.group = "default";
         this.explode();
+
+        this.node.parent.getChildByName("gorilla" + ((!this.isL) ? "L" : "R"))
+                .getComponent("gorilla").dance();
         this.node.parent.getComponent("game").dancing = (!this.isL) ? "L" : "R";
         this.node.parent.getComponent("game").isBananaStage = false;
     },
@@ -67,7 +72,7 @@ cc.Class({
         this.node.parent.addChild(expbg);
         expbg.setSiblingIndex(this.node.getSiblingIndex());
         expbg.setPosition(this.node.x, this.node.y);
-        expbg.setScale(2.5);
+        expbg.setScale(6);
 
         this.node.getComponent(cc.Animation).play("explosion-gorilla");
     },
