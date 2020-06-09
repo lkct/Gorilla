@@ -1,0 +1,41 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "roll-borderU",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "x": [
+        {
+          "frame": 0,
+          "value": -320,
+          "curve": "constant"
+        },
+        {
+          "frame": 0.2,
+          "value": -312,
+          "curve": "constant"
+        },
+        {
+          "frame": 0.4,
+          "value": -304,
+          "curve": "constant"
+        },
+        {
+          "frame": 0.6,
+          "value": -296,
+          "curve": "constant"
+        },
+        {
+          "frame": 0.8,
+          "value": -320
+        }
+      ]
+    }
+  },
+  "events": []
+}
