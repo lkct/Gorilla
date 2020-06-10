@@ -167,7 +167,7 @@ cc.Class({
                         input = 3;
                     }
 
-                    if (input <= 0) {
+                    if ((input <= 0) || (input >= 100)) {
                         this.lblCurrent.string =
                             this.lblCurrent.string.slice(0, inputPos) + "_";
                         return; // illegal input
