@@ -66,8 +66,13 @@ cc.Class({
     },
 
     loadEnd: function (scoreL, scoreR) {
+        var self = this;
         cc.director.loadScene("End", function () {
-            //TODO
+            var end = cc.find("Canvas/end").getComponent("end");
+            end.playerL = self.playerL;
+            end.playerR = self.playerR;
+            end.scoreL = scoreL;
+            end.scoreR = scoreR;
         });
     },
 });

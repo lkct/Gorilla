@@ -60,7 +60,7 @@ cc.Class({
                     this.input1, this.input2, this.inputn, this.inputg);
             }
             else if (event.keyCode == cc.macro.KEY.q) {
-                // TODO quit game
+                cc.game.end();
             }
         }
 
