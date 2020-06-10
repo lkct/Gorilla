@@ -77,7 +77,7 @@ cc.Class({
         this.inputSpeed = undefined;
 
         this.node.parent.getChildByName("cloud")
-            .getComponent(cc.Animation).play().speed = 0.1 * this.wind;
+            .getComponent(cc.Animation).play().speed = -0.1 * this.wind;
     },
 
     onDestroy: function () {
