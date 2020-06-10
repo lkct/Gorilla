@@ -16,7 +16,8 @@
         },
         {
           "frame": 35.4,
-          "value": -340
+          "value": -340,
+          "curve": "constant"
         },
         {
           "frame": 35.5,
