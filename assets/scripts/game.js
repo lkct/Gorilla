@@ -23,6 +23,7 @@ cc.Class({
         updatePeriod: 1,
         maxIter: 100,
         dpm: 1, // dots per meter
+        drag: 0.1,
         bananaPrefab: {
             default: null,
             type: cc.Prefab
@@ -57,6 +58,8 @@ cc.Class({
         this.gravity = 9.8;
         this.scoreL = 0;
         this.scoreR = 0;
+
+        this.wind = randInt(-10, 11);
 
         this.timeStopped = 0.0;
         this.isInputStage = true;
@@ -119,7 +122,8 @@ cc.Class({
             var bananaNode = this.node.getChildByName("banana");
             var bananaScript = bananaNode.getComponent("banana");
             if (bananaScript.isToDestroy || (this.iters == this.maxIter) ||
-                !bananaScript.move(this.timeStopped, this.gravity)) {
+                !bananaScript.move(this.timeStopped, this.gravity,
+                    this.wind, this.drag)) {
                 bananaNode.destroy();
 
                 this.isBananaStage = false;

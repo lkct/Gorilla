@@ -37,14 +37,16 @@ cc.Class({
         }
     },
 
-    move: function (dt, accel) {
+    move: function (dt, accel, wind, drag) {
         if (this.collided) {
             return true;
         }
 
+        this.speedX -= dt * (this.speedX - wind) * drag / 2;
         this.speedY -= dt * accel / 2;
         this.node.x += this.speedX * dt * (this.isL ? 1 : -1) * this.dpm;
         this.node.y += this.speedY * dt * this.dpm;
+        this.speedX -= dt * (this.speedX - wind) * drag / 2;
         this.speedY -= dt * accel / 2;
         this.node.angle -= 90 * (this.isL ? 1 : -1);
         if (this.angle >= 360) {

@@ -1257,8 +1257,9 @@
     },
     "_enabled": true,
     "updatePeriod": 0.2,
-    "maxIter": 100,
+    "maxIter": 250,
     "dpm": 1,
+    "drag": 0.05,
     "bananaPrefab": {
       "__uuid__": "040a8aeb-4c02-41ca-8fbd-1fcf801d76c2"
     },
