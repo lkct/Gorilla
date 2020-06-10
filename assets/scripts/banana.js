@@ -70,7 +70,7 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        if (this.collided) {
+        if (this.collided || (this.node.y > 168)) { // collided or colliding sun
             return;
         }
 

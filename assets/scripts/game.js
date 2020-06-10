@@ -167,8 +167,10 @@ cc.Class({
         }
 
         this.node.getChildByName("gorillaL").setSiblingIndex(
-            this.node.childrenCount - 2);
+            this.node.childrenCount - 3);
         this.node.getChildByName("gorillaR").setSiblingIndex(
+            this.node.childrenCount - 2);
+        this.node.getChildByName("sun").setSiblingIndex(
             this.node.childrenCount - 1);
     },
 
