@@ -70,18 +70,17 @@ cc.Class({
     },
 
     onCollisionEnter: function (other, self) {
-        if (this.collided)
-        {
+        if (this.collided) {
             return;
         }
-        
+
         this.collided = true;
         this.explode();
     },
 
     explode: function () {
-        var expbg = cc.instantiate(this.node.parent
-            .getComponent("game").explosionbgPrefab);
+        var expbg = cc.instantiate(
+            this.node.parent.getComponent("game").explosionbgPrefab);
         this.node.parent.addChild(expbg);
         expbg.setSiblingIndex(this.node.getSiblingIndex());
         expbg.setPosition(this.node.x, this.node.y);

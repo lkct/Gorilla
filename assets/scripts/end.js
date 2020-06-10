@@ -41,14 +41,19 @@ cc.Class({
         var nameL = spaces.slice(this.playerL.length) + this.playerL;
         var nameR = this.playerR + spaces.slice(this.playerR.length);
         cc.find("Canvas/lbl-names")
-            .getComponent(cc.Label).string = nameL + " vs " + nameR;
+            .getComponent(cc.Label).string = nameL + "  vs  " + nameR;
 
         var scoreL = this.scoreL.toString();
         scoreL = ((scoreL < 10) ? "0" : "") + scoreL;
         var scoreR = this.scoreR.toString();
         scoreR = ((scoreR < 10) ? "0" : "") + scoreR;
         cc.find("Canvas/lbl-scores")
-            .getComponent(cc.Label).string = scoreL + " : " + scoreR;
+            .getComponent(cc.Label).string = scoreL + "   :   " + scoreR;
+
+        cc.find("Canvas/lbl-win").getComponent(cc.Label).string =
+            (scoreL > scoreR) ? "WIN         "
+                : (scoreL < scoreR) ? "         WIN"
+                    : "    DRAW    ";
     },
 
     update: function (dt) {

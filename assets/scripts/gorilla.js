@@ -47,7 +47,8 @@ cc.Class({
         var banana = cc.instantiate(bananaPrefab);
         banana.name = "banana";
         this.node.parent.addChild(banana);
-        banana.setSiblingIndex(this.node.getSiblingIndex());
+        banana.setSiblingIndex(
+            this.node.parent.getChildByName("gorillaL").getSiblingIndex());
         banana.setPosition(this.node.x - 8 * (this.isL ? 1 : -1),
             this.node.y + 36);
         banana.getComponent("banana").isL = this.isL;
@@ -61,14 +62,14 @@ cc.Class({
         this.explode();
 
         this.node.parent.getChildByName("gorilla" + ((!this.isL) ? "L" : "R"))
-                .getComponent("gorilla").dance();
+            .getComponent("gorilla").dance();
         this.node.parent.getComponent("game").dancing = (!this.isL) ? "L" : "R";
         this.node.parent.getComponent("game").isBananaStage = false;
     },
 
     explode: function () {
-        var expbg = cc.instantiate(this.node.parent
-            .getComponent("game").explosionbgPrefab);
+        var expbg = cc.instantiate(
+            this.node.parent.getComponent("game").explosionbgPrefab);
         this.node.parent.addChild(expbg);
         expbg.setSiblingIndex(this.node.getSiblingIndex());
         expbg.setPosition(this.node.x, this.node.y + 14.5);

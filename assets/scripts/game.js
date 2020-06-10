@@ -21,6 +21,7 @@ cc.Class({
 
     properties: {
         updatePeriod: 1,
+        maxIter: 100,
         dpm: 1, // dots per meter
         bananaPrefab: {
             default: null,
@@ -60,11 +61,12 @@ cc.Class({
         this.timeStopped = 0.0;
         this.isInputStage = true;
         this.isBananaStage = false;
+        this.iters = 0;
         this.dancing = "";
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown, this);
-        this.isLTurn = true;
+        this.playing = "L";
         this.nextInput = "angle";
         this.lblCurrent = undefined;
         this.isEnterPressed = false;
@@ -102,7 +104,7 @@ cc.Class({
             this.processInput();
             if ((this.inputAngle !== undefined) &&
                 (this.inputSpeed !== undefined)) {
-                this.node.getChildByName("gorilla" + (this.isLTurn ? "L" : "R"))
+                this.node.getChildByName("gorilla" + this.playing)
                     .getComponent("gorilla")
                     .throw(this.inputAngle, this.inputSpeed, this.bananaPrefab);
 
@@ -113,15 +115,17 @@ cc.Class({
             }
         }
         else if (this.isBananaStage) {
+            this.iters++;
             var bananaNode = this.node.getChildByName("banana");
             var bananaScript = bananaNode.getComponent("banana");
-            if (bananaScript.isToDestroy ||
+            if (bananaScript.isToDestroy || (this.iters == this.maxIter) ||
                 !bananaScript.move(this.timeStopped, this.gravity)) {
                 bananaNode.destroy();
 
                 this.isBananaStage = false;
                 this.isInputStage = true;
-                this.isLTurn = !this.isLTurn;
+                this.iters = 0;
+                this.playing = (this.playing == "R") ? "L" : "R";
             };
         }
         else {
@@ -131,7 +135,8 @@ cc.Class({
                 !animDancing.getAnimationState("handupR").isPlaying) {
                 eval("this.score" + this.dancing + "++");
                 cc.find("main").getComponent("main").loadNext(
-                    this.scoreL, this.scoreR);
+                    this.scoreL, this.scoreR,
+                    (this.playing == "R") ? "L" : "R");
             }
         }
 
@@ -234,8 +239,8 @@ cc.Class({
 
     processInput: function () {
         if (this.lblCurrent === undefined) {
-            var lblNode = cc.find("Canvas/lbl-" + this.nextInput +
-                (this.isLTurn ? "L" : "R"));
+            var lblNode = cc.find(
+                "Canvas/lbl-" + this.nextInput + this.playing);
             lblNode.active = true;
             this.lblCurrent = lblNode.getComponent(cc.Label);
             this.lblCurrent.string += "_";
@@ -271,12 +276,10 @@ cc.Class({
 
                 this.inputSpeed = input;
 
-                var lblNode = cc.find("Canvas/lbl-angle" +
-                    (this.isLTurn ? "L" : "R"));
+                var lblNode = cc.find("Canvas/lbl-angle" + this.playing);
                 lblNode.getComponent(cc.Label).string = "Angle: ";
                 lblNode.active = false;
-                lblNode = cc.find("Canvas/lbl-speed" +
-                    (this.isLTurn ? "L" : "R"));
+                lblNode = cc.find("Canvas/lbl-speed" + this.playing);
                 lblNode.getComponent(cc.Label).string = "Speed: ";
                 lblNode.active = false;
 

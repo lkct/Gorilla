@@ -47,7 +47,7 @@ cc.Class({
         });
     },
 
-    loadNext: function (scoreL, scoreR) {
+    loadNext: function (scoreL, scoreR, nextPlay) {
         this.ngames--;
         if (this.ngames == 0) {
             this.loadEnd(scoreL, scoreR);
@@ -62,6 +62,7 @@ cc.Class({
             game.gravity = self.gravity;
             game.scoreL = scoreL;
             game.scoreR = scoreR;
+            game.playing = nextPlay;
         });
     },
 

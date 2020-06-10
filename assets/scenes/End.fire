@@ -100,15 +100,18 @@
       },
       {
         "__id__": 28
+      },
+      {
+        "__id__": 30
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 30
+        "__id__": 32
       },
       {
-        "__id__": 31
+        "__id__": 33
       }
     ],
     "_prefab": null,
@@ -1062,7 +1065,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 224,
+      "width": 240,
       "height": 12
     },
     "_anchorPoint": {
@@ -1113,8 +1116,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "    Player 1 vs Player 2    ",
-    "_N$string": "    Player 1 vs Player 2    ",
+    "_string": "    Player 1  vs  Player 2    ",
+    "_N$string": "    Player 1  vs  Player 2    ",
     "_fontSize": 12,
     "_lineHeight": 12,
     "_enableWrapText": true,
@@ -1158,7 +1161,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56,
+      "width": 88,
       "height": 12
     },
     "_anchorPoint": {
@@ -1209,8 +1212,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "00 : 00",
-    "_N$string": "00 : 00",
+    "_string": "00   :   00",
+    "_N$string": "00   :   00",
     "_fontSize": 12,
     "_lineHeight": 12,
     "_enableWrapText": true,
@@ -1231,7 +1234,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "end",
+    "_name": "lbl-win",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -1241,6 +1244,102 @@
     "_components": [
       {
         "__id__": 29
+      }
+    ],
+    "_prefab": null,
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 96,
+      "height": 12
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 1
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": "4cjuo2SXJAtKH4vF0NsgkV"
+  },
+  {
+    "__type__": "cc.Label",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 28
+    },
+    "_enabled": true,
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
+    "_useOriginalSize": false,
+    "_string": "WIN DRAW WIN",
+    "_N$string": "WIN DRAW WIN",
+    "_fontSize": 12,
+    "_lineHeight": 12,
+    "_enableWrapText": true,
+    "_N$file": {
+      "__uuid__": "bcb3e07b-2d37-4366-af0d-fe8af05eef89"
+    },
+    "_isSystemFontUsed": false,
+    "_spacingX": 0,
+    "_batchAsBitmap": false,
+    "_styleFlags": 0,
+    "_underlineHeight": 0,
+    "_N$horizontalAlign": 1,
+    "_N$verticalAlign": 1,
+    "_N$fontFamily": "Terminal",
+    "_N$overflow": 0,
+    "_N$cacheMode": 0,
+    "_id": "0adPY7JbpB/LxK8xHuk2RH"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "end",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 2
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 31
       }
     ],
     "_prefab": null,
@@ -1296,7 +1395,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 28
+      "__id__": 30
     },
     "_enabled": true,
     "_id": "2bSNDZSsJBEaNK6TLnLNmE"
