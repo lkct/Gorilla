@@ -75,6 +75,9 @@ cc.Class({
         this.isEnterPressed = false;
         this.inputAngle = undefined;
         this.inputSpeed = undefined;
+
+        this.node.parent.getChildByName("cloud")
+            .getComponent(cc.Animation).play().speed = 0.1 * this.wind;
     },
 
     onDestroy: function () {
