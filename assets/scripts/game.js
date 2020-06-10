@@ -159,9 +159,9 @@ cc.Class({
         for (let i = 0; i < 12; i++) {
             maxLen = Math.min(maxLen, rest - (11 - i) * minLen);
             minLen = Math.max(minLen, rest - (11 - i) * maxLen);
-            x0 = (60 - rest) * 10 + (i + 1) * 3;
-            width = randInt(minLen, maxLen + 1);
-            height = randInt(1, 21);
+            var x0 = (60 - rest) * 10 + (i + 1) * 3;
+            var width = randInt(minLen, maxLen + 1);
+            var height = randInt(1, 21);
             this.spawnBuilding(x0, width, height, randInt(3));
 
             if ((i == 2) && onThirdL || (i == 1) && !onThirdL) {
