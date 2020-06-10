@@ -20,8 +20,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        updatePeriod: 1,
         dpm: 1, // dots per meter
-        gravity: 9.8, // m/s^2
         bananaPrefab: {
             default: null,
             type: cc.Prefab
@@ -51,7 +51,12 @@ cc.Class({
         // cc.director.getCollisionManager().enabledDebugDraw = true;
         this.spawnMap();
 
-        this.updatePeriod = 1.0;
+        this.playerL = "Player 1";
+        this.playerR = "Player 2";
+        this.gravity = 9.8;
+        this.scoreL = 0;
+        this.scoreR = 0;
+
         this.timeStopped = 0.0;
         this.isInputStage = true;
         this.isBananaStage = false;
@@ -70,13 +75,23 @@ cc.Class({
     onDestroy: function () {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN,
             this.onKeyDown, this);
-        for (const child of this.children) {
-            child.destroy();
-        }
         cc.director.getCollisionManager().enabled = false;
     },
 
     start: function () {
+        cc.find("Canvas/lbl-playerL")
+            .getComponent(cc.Label).string = this.playerL;
+        cc.find("Canvas/lbl-playerR")
+            .getComponent(cc.Label).string = this.playerR;
+
+        var lblScore = cc.find("Canvas/lbl-score")
+            .getComponent(cc.Label);
+        var scoreL = this.scoreL.toString();
+        scoreL = ((scoreL < 10) ? "0" : "") + scoreL;
+        var scoreR = this.scoreR.toString();
+        scoreR = ((scoreR < 10) ? "0" : "") + scoreR;
+        cc.find("Canvas/lbl-score")
+            .getComponent(cc.Label).string = scoreL + ">SCORE<" + scoreR;
     },
 
     update: function (dt) {
@@ -116,19 +131,9 @@ cc.Class({
                 .getComponent(cc.Animation);
             if (!animDancing.getAnimationState("handupL").isPlaying &&
                 !animDancing.getAnimationState("handupR").isPlaying) {
-                var lblScore = cc.find("Canvas/lbl-score")
-                    .getComponent(cc.Label);
-                var score = (this.dancing == "L") ? lblScore.string.slice(0, 2)
-                    : lblScore.string.slice(-2);
-                score = (parseInt(score, 10) + 1).toString();
-                score = ((score < 10) ? "0" : "") + score;
-                if (this.dancing == 'L') {
-                    lblScore.string = score + lblScore.string.slice(2);
-                }
-                else {
-                    lblScore.string = lblScore.string.slice(0, -2) + score;
-                }
-                // destroy
+                eval("this.score" + this.dancing + "++");
+                cc.find("main").getComponent("main").loadNext(
+                    this.scoreL, this.scoreR);
             }
         }
 
@@ -189,13 +194,16 @@ cc.Class({
     },
 
     onKeyDown: function (event) {
-        if (this.lblCurrent === undefined) {
+        if ((this.lblCurrent === undefined) || this.isEnterPressed) {
             return;
         }
 
         this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
         switch (event.keyCode) {
             case cc.macro.KEY.backspace:
+                if (this.lblCurrent.string.slice(-1) == " ") {
+                    break;
+                }
                 this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
                 break;
 
@@ -223,7 +231,7 @@ cc.Class({
                 }
                 break;
         }
-        this.lblCurrent.string += '_';
+        this.lblCurrent.string += "_";
     },
 
     processInput: function () {
@@ -232,10 +240,11 @@ cc.Class({
                 (this.isLTurn ? "L" : "R"));
             lblNode.active = true;
             this.lblCurrent = lblNode.getComponent(cc.Label);
-            this.lblCurrent.string += '_';
+            this.lblCurrent.string += "_";
         }
         else if (this.isEnterPressed) {
             this.isEnterPressed = false;
+
             this.lblCurrent.string = this.lblCurrent.string.slice(0, -1);
             var input = Number(this.lblCurrent.string.slice(7), 10);
             if (isNaN(input) || (this.lblCurrent.string.length == 7)) {
@@ -275,6 +284,7 @@ cc.Class({
 
                 this.nextInput = "angle";
             }
+
             this.lblCurrent = undefined;
         }
     },
