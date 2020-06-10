@@ -84,8 +84,6 @@ cc.Class({
         cc.find("Canvas/lbl-playerR")
             .getComponent(cc.Label).string = this.playerR;
 
-        var lblScore = cc.find("Canvas/lbl-score")
-            .getComponent(cc.Label);
         var scoreL = this.scoreL.toString();
         scoreL = ((scoreL < 10) ? "0" : "") + scoreL;
         var scoreR = this.scoreR.toString();
