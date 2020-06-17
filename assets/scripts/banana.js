@@ -42,6 +42,7 @@ cc.Class({
             return true;
         }
 
+        wind *= (this.isL ? 1 : -1);
         this.speedX -= dt * (this.speedX - wind) * drag / 2;
         this.speedY -= dt * accel / 2;
         this.node.x += this.speedX * dt * (this.isL ? 1 : -1) * this.dpm;
